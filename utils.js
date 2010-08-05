@@ -32,6 +32,12 @@ function inArray (arr,value) {
 	return false;
 }
 
+function arrayPos (arr,value) {
+	var i;
+	for (i=0; i < arr.length; i++) { if (arr[i] == value) { return i; } }
+	return -1;
+}
+
 function uniqueize (arr) {
 	var newarr = new Array();
 	for (var i=0; i < arr.length; i++) {
