@@ -52,9 +52,16 @@ LabelManager.prototype.warmupFileCache = function(filenames) {
 	function incache(f) { return LabelManager.track_cache[f] === undefined; }
 	var keys = map( function(f) { return quotestr(path2rpath(f)); } , filter( incache, filenames ) );
 	if (keys.length == 0) { return; }
+	keys = uniqueize(keys); // make them unique so the database returns the exact same number of rows as we sent it
 	var query = "select id,rpath from urls where rpath in ("+keys.join(",")+")";
 	var res = batch(q(query),2);
 	if (keys.length != res.length) {
+		var resrpaths = map ( function f(x) { return quotestr(x[1]); } , res );
+		var both = [].concat(keys).concat(resrpaths);
+		for (var b = 0 ; b < both.length ; b++) {
+			if ( !inArray (keys, both[b]) ) { d(both[b] + " not in keys"); }
+			if ( !inArray (resrpaths, both[b]) ) { d(both[b] + " not in res"); }
+		}
 		throw "Unexpected keys.length != res.length: " + keys.length + " " + res.length;
 	}
 	for (var i in res) { LabelManager.track_cache[rpath2path(res[i][1])] = res[i][0]; }
@@ -63,6 +70,7 @@ LabelManager.prototype.warmupLabelCache = function(labels) {
 	function incache(f) { return LabelManager.label_cache[f] === undefined; }
 	var keys = map( quotestr, filter( incache, labels ) );
 	if (keys.length == 0) { return; }
+	keys = uniqueize(keys); // make them unique so the database returns the exact same number of rows as we sent it
 	var query = "select id,label from labels where label in ("+keys.join(",")+")";
 	var res = batch(q(query),2);
 	if (keys.length != res.length) {
