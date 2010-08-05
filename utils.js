@@ -18,6 +18,8 @@
 
 var utils_js_loaded; if (!utils_js_loaded) {
 
+Importer.loadQtBinding( "qt.core" );
+
 function basename(path) {
     return path.replace(/\\/g,'/').replace( /.*\//, '' );
 }
