@@ -28,7 +28,7 @@ if (!Importer.include("../amarokjslib/LabelManager.js")) {
 
 // FIXME: make load this version from the specfile
 
-amarokjslib_version = "0.1.1";
+amarokjslib_version = "0.1.2";
 
 function amarokjslib_satisfies_version(minimum_version) {
     var mine = amarokjslib_version.split(".");
